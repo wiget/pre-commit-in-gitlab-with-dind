@@ -1,0 +1,31 @@
+version: "2"
+
+services:
+  docker:
+    image: docker:dind
+    privileged: true
+    environment:
+      DOCKER_DRIVER: "overlay2"
+      DOCKER_TLS_CERTDIR: /certs
+    expose:
+      - 2375
+      - 2376
+    volumes:
+      - "certs:/certs"
+      - "build:/build"
+
+  job:
+    build: .
+    links:
+      - docker
+    environment:
+      DOCKER_HOST: tcp://docker:2376
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: "1"
+    volumes_from: 
+      - docker
+    working_dir: /build
+
+volumes:
+  certs:
+  build:

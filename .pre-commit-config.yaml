@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: dummy
+        name: dummy
+        language: docker_image
+        entry: busybox:latest sh -c "printf 'Hello from docker'"
+        verbose: true
